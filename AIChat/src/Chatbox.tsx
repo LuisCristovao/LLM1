@@ -11,7 +11,7 @@ const ChatBox: React.FC = () => {
   const [messages, setMessages] = useState([
     {
       role: "system",
-      content: `You are a helpful AI assistant.`,
+      content: `Hi how can I help you?`,
     },
   ]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -127,7 +127,15 @@ const ChatBox: React.FC = () => {
         style={{ width: "100%", resize: "none" }}
         placeholder="Type your question..."
         value={input}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={(e:any) => {
+            setInput(e.target.value)
+        }}
+        onKeyDown={(e:any)=>{
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault(); // prevent newline
+                sendMessage();
+              }
+        }}
       ></textarea>
 
       <button
