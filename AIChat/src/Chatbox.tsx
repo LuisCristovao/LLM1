@@ -10,13 +10,26 @@ const ChatBox: React.FC = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
     {
-      role: "system",
-      content: `Hi how can I help you?`,
+      role: "assistant",
+      content: `Hi, how can I help you, to get to know Luis?`,
     },
   ]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [status, setStatus] = useState("");
   const chatBoxRef = useRef<HTMLDivElement>(null);
+//   const conversation_history=useRef<any[]>([])
+
+  const initialKnowledge=
+    {
+      role: "system",
+      content: `You are a AI system design to help others to know Luis Cristovão, best know by Tiago Cristovao,
+       please answer questions to users knowing that you have much respect by Luis Cristovao, and give always short answers, now  his cv:
+        `,
+    }
+  
+
+
+
 
   const scrollToBottom = () => {
     if (chatBoxRef.current) {
@@ -35,17 +48,19 @@ const ChatBox: React.FC = () => {
 
   const sendMessage = async () => {
     if (!input.trim() || isGenerating) return;
-
-    const newMessages = [...messages, { role: "user", content: input }];
+    // conversation_history.current=[...conversation_history.current,messages[messages.length-1]]
+    const reduceMessages=[...messages.slice(-3)]
+    const newMessages = [...reduceMessages, { role: "user", content: input }];
     setMessages([...newMessages, { role: "assistant", content: "typing..." }]);
     setInput("");
     setIsGenerating(true);
 
     try {
       let curMessage = "";
+      const ai_context=[initialKnowledge,...newMessages]
       const completion = await engine.chat.completions.create({
         stream: true,
-        messages: newMessages,
+        messages: ai_context,
       });
 
       for await (const chunk of completion) {
@@ -103,7 +118,7 @@ const ChatBox: React.FC = () => {
         ref={chatBoxRef}
         style={{
           border: "1px solid #ccc",
-          height: 300,
+          height: 500,
           overflowY: "auto",
           padding: "0.5rem",
           marginBottom: "1rem",
