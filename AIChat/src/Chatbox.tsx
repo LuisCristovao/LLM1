@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 // @ts-ignore – using remote ESM module
 import * as webllm from "@mlc-ai/web-llm";
@@ -130,7 +130,7 @@ other interests:
 
     try {
       let curMessage = "";
-      const ai_context = [initialKnowledge, ...newMessages];
+      const ai_context:any = [initialKnowledge, ...newMessages];
       const completion = await engine.chat.completions.create({
         stream: true,
         messages: ai_context,
