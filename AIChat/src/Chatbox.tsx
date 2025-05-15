@@ -1,35 +1,108 @@
 import React, { useEffect, useRef, useState } from "react";
 
 // @ts-ignore – using remote ESM module
-import * as webllm from "https://esm.run/@mlc-ai/web-llm";
+import * as webllm from "@mlc-ai/web-llm";
 
 const ChatBox: React.FC = () => {
   const [engine] = useState(() => new webllm.MLCEngine());
-  const [models] = useState(() => webllm.prebuiltAppConfig.model_list.map((m:any) => m.model_id));
-  const [selectedModel, setSelectedModel] = useState("Llama-3-8B-Instruct-q4f32_1-MLC-1k");
+  const [models] = useState(() =>
+    webllm.prebuiltAppConfig.model_list.map((m: any) => m.model_id)
+  );
+  const [selectedModel, setSelectedModel] = useState(
+    "Llama-3-8B-Instruct-q4f32_1-MLC-1k"
+  );
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: `Hi, how can I help you, to get to know Luis?`,
+      content: `Hello, how may I assist you in getting to know Luis?`,
     },
   ]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [status, setStatus] = useState("");
   const chatBoxRef = useRef<HTMLDivElement>(null);
-//   const conversation_history=useRef<any[]>([])
+  //   const conversation_history=useRef<any[]>([])
 
-  const initialKnowledge=
-    {
-      role: "system",
-      content: `You are a AI system design to help others to know Luis Cristovão, best know by Tiago Cristovao,
+  const initialKnowledge = {
+    role: "system",
+    content: `You are a AI system design to help others to know Luis Cristovão, best know by Tiago Cristovao,
        please answer questions to users knowing that you have much respect by Luis Cristovao, and give always short answers, now  his cv:
-        `,
-    }
-  
+        Javascript / Python developer as hobby changing carrier from data engineer to front end / full stack dev because I like it more than data engineering
+        and we live in an age where if you dont do what you like you will under performe
+[2016] - [Now]
 
 
+See my website for all projects done: https://luiscristovao.github.io/Projects/
 
+Here are some relevant projects:
+Local Password Manager in React 19  ts: https://luiscristovao.github.io/Projects/index.html?Password-Manager-v3 
+Interface to manage and store site’s users, password and sensitive information 
+Data encrypted with AES-GCM
+Data Stored using browser IndexDB
+Data synchronization between devices using webRTC
+Usage of QRcode scanner to connect devices 
+Has offline version
+
+Indie Game: https://luiscristovao.github.io/Projects/index.html?Color-Origin-Game
+Game developed with pure html and js
+Works offline
+Works on mobile and PC (adjusting itself for each environment)
+Platform physics based game (colision and rope mechanics)
+Optimized performance for device capabilities  
+
+Bible Reader: https://luiscristovao.github.io/Projects/index.html?Bible-Project
+Uses Bible Json to present chapters
+Uses js workers for parallel power, for searching keywords in the entire bible
+Saves favorites verses in local Storage
+Uses webRTC to syncronize favorites between devices
+
+My site all developed by me: https://github.com/LuisCristovao/Projects/tree/master/SiteFolder
+Includes smart search for site posts
+Custom backend for edit Json database
+Capable of creating pages from templates 
+
+Basic Machine learning server: https://luiscristovao.github.io/Projects/index.html?Basic-Machine-Learning-Server
+
+File Upload server with url share link: https://luiscristovao.github.io/Projects/index.html?File-Upload-Server.
+
+Chat Rooms: https://luiscristovao.github.io/Projects/index.html?Chat-Rooms-App
+
+Purpose Calendar manager: https://luiscristovao.github.io/Projects/index.html?Purpose-Calendar-Manager
+
+Particles Animation with math:https://luiscristovao.github.io/CSS-Animation-Engine/crazy_animations/game.html
+
+Technologies used: Html and javascript, python, flask, node js express 
+
+Data Engineer at various banks
+[11/03/2019] - [04/10/2023]
+
+
+Worked in 2 banks for almost 5 years as a data engineer 
+Technologies used: Python ,Pyspark, SQL, Bash, Azure cloud environment
+
+
+Education
+ Master Degree in Electrical and Computer Engineering
+[2010] - [2017]
+
+
+[University] - NOVA, faculty of science and technology 
+[Location] - Caparica, Lisbon
+[GPA] - 14,06 in 20
+[Master Thesis] - Smart Cities - A Serious Digital Game, 17 values in 20
+
+for leasure:
+    wonder through nature
+    being with friends
+    read books
+    casual physical exercise
+    travel when possible
+
+other interests:
+        catholic religion
+
+      `,
+  };
 
   const scrollToBottom = () => {
     if (chatBoxRef.current) {
@@ -49,7 +122,7 @@ const ChatBox: React.FC = () => {
   const sendMessage = async () => {
     if (!input.trim() || isGenerating) return;
     // conversation_history.current=[...conversation_history.current,messages[messages.length-1]]
-    const reduceMessages=[...messages.slice(-3)]
+    const reduceMessages = [...messages.slice(-3)];
     const newMessages = [...reduceMessages, { role: "user", content: input }];
     setMessages([...newMessages, { role: "assistant", content: "typing..." }]);
     setInput("");
@@ -57,7 +130,7 @@ const ChatBox: React.FC = () => {
 
     try {
       let curMessage = "";
-      const ai_context=[initialKnowledge,...newMessages]
+      const ai_context = [initialKnowledge, ...newMessages];
       const completion = await engine.chat.completions.create({
         stream: true,
         messages: ai_context,
@@ -69,7 +142,10 @@ const ChatBox: React.FC = () => {
           curMessage += delta;
           setMessages((prev) => {
             const updated = [...prev];
-            updated[updated.length - 1] = { role: "assistant", content: curMessage };
+            updated[updated.length - 1] = {
+              role: "assistant",
+              content: curMessage,
+            };
             return updated;
           });
           scrollToBottom();
@@ -78,10 +154,12 @@ const ChatBox: React.FC = () => {
 
       setMessages((prev) => {
         const updated = [...prev];
-        updated[updated.length - 1] = { role: "assistant", content: curMessage };
+        updated[updated.length - 1] = {
+          role: "assistant",
+          content: curMessage,
+        };
         return updated;
       });
-
     } catch (err) {
       console.error("Generation failed", err);
     }
@@ -100,7 +178,7 @@ const ChatBox: React.FC = () => {
           onChange={(e) => setSelectedModel(e.target.value)}
           disabled={isGenerating}
         >
-          {models.map((m:any) => (
+          {models.map((m: any) => (
             <option key={m} value={m}>
               {m}
             </option>
@@ -111,7 +189,9 @@ const ChatBox: React.FC = () => {
         </button>
       </label>
 
-      <div style={{ fontSize: "0.9rem", marginBottom: "1rem", color: "#555" }}>{status}</div>
+      <div style={{ fontSize: "0.9rem", marginBottom: "1rem", color: "#555" }}>
+        {status}
+      </div>
 
       <div
         id="chat-box"
@@ -138,18 +218,17 @@ const ChatBox: React.FC = () => {
       </div>
 
       <textarea
-        
         style={{ width: "100%", resize: "none" }}
         placeholder="Type your question..."
         value={input}
-        onChange={(e:any) => {
-            setInput(e.target.value)
+        onChange={(e: any) => {
+          setInput(e.target.value);
         }}
-        onKeyDown={(e:any)=>{
-            if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault(); // prevent newline
-                sendMessage();
-              }
+        onKeyDown={(e: any) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // prevent newline
+            sendMessage();
+          }
         }}
       ></textarea>
 
