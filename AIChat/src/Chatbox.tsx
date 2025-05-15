@@ -171,7 +171,7 @@ other interests:
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "auto", fontFamily: "sans-serif" }}>
+    <div style={{ maxWidth: 600,display:"flex",alignItems:"center",flexDirection:"column" }}>
       <h2>🧠 WebLLM Chat</h2>
 
       <label>
@@ -192,20 +192,14 @@ other interests:
         </button>
       </label>
 
-      <div style={{ fontSize: "0.9rem", marginBottom: "1rem", color: "#999" }}>
+      <div className="loading" style={{ fontSize: "0.9rem", marginBottom: "1rem", color: "#999" }}>
         {status}
       </div>
 
       <div
         id="chat-box"
         ref={chatBoxRef}
-        style={{
-          border: "1px solid #ccc",
-          height: 500,
-          overflowY: "auto",
-          padding: "0.5rem",
-          marginBottom: "1rem",
-        }}
+        
       >
         {messages.map((msg, i) => (
           <div
@@ -225,7 +219,7 @@ other interests:
       </div>
 
       <textarea
-        style={{ width: "100%", resize: "none" }}
+        
         placeholder="Type your question..."
         value={input}
         onChange={(e: any) => {
@@ -252,7 +246,6 @@ other interests:
           sendMessage()
         }}
         disabled={isGenerating || status !== "Ready!"}
-        style={{ marginTop: "0.5rem", width: "100%" }}
       >
         {isGenerating ? "Generating..." : "Send"}
       </button>

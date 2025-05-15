@@ -1,110 +1,32 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-body,
-html {
-  font-family: Arial, sans-serif;
-  padding: 10px 20px;
 }
 
-.download-container {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-#download-status {
-  border: solid 1px black;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05);
-  padding: 10px;
-}
-
-.chat-container {
-  height: 400px;
+/* Default height for desktop and larger screens */
+#chat-box {
   width: 100%;
-  border: 2px solid black;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-box {
-  overflow-y: scroll;
-  background-color: #c3c3c3;
+  height: 500px;
   border: 1px solid #ccc;
-  padding: 5px;
-  flex: 1 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
 }
-
-.chat-stats {
-  background-color: #D3ECEB;
-  flex: 0 0;
-  padding: 10px;
-  font-size: 0.75rem;
-}
-
-.message-container {
+textarea, button,label {
+  resize: none;
   width: 100%;
-  display: flex;
 }
 
-.message {
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 10px;
-  width: fit-content;
+/* Media query for mobile devices (screens 768px wide or less) */
+@media (max-width: 768px) {
+  /* Override height for smaller screens */
+  #chat-box {
+    height: 300px;
+    width: 80%;
+  }
+  textarea,button,label,.loading {
+    resize: none;
+    width: 80%;
+  }
 }
 
-.message-container.user {
-  justify-content: end;
-}
-
-.message-container.assistant {
-  justify-content: start;
-}
-
-.message-container.user .message {
-  background: #007bff;
-  color: #fff;
-}
-
-.message-container.assistant .message {
-  background: #f1f0f0;
-  color: #333;
-}
-
-.chat-input-container {
-  min-height: 40px;
-  flex: 0 0;
-  display: flex;
-}
-
-#user-input {
-  width: 70%;
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-button {
-  width: 25%;
-  padding: 10px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-button:disabled {
-  background-color: lightgray;
-  cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
-  background-color: #0056b3;
-}
-
-.hidden {
-  display: none;
-}

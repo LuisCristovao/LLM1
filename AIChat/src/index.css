@@ -4,10 +4,12 @@ body {
   display: flex;
   flex-direction: column;
   place-items: center;
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
   background-color: black;
   color: aliceblue;
+  font-family: Arial, sans-serif;
 }
 
 
