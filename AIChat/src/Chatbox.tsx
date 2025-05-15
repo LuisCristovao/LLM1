@@ -210,6 +210,10 @@ other interests:
             style={{
               textAlign: msg.role === "user" ? "right" : "left",
               margin: "0.5rem 0",
+              whiteSpace: "pre-line",
+              wordBreak: "break-word",       // ✅ Prevents overflow on long words/URLs
+              overflowWrap: "break-word",    // ✅ Helps break long unbroken strings
+              
             }}
           >
             <strong>{msg.role === "user" ? "You" : "AI"}:</strong> {msg.content}
