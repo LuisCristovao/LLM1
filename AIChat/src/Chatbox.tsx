@@ -23,16 +23,23 @@ const ChatBox: React.FC = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null);
   //   const conversation_history=useRef<any[]>([])
 
-  const initialKnowledge = {
-    role: "system",
-    content: `You are a AI system design to help others to know Luis Cristovão, best know by Tiago Cristovao,
+  const initialKnowledge = [
+    {
+      role: "system",
+      content: `You are a AI system design to help others to know about Luis Cristovão, best know by Tiago Cristovao,
        please answer questions to users knowing that you have much respect by Luis Cristovao, and give always short answers, now  his cv:
         Javascript / Python developer as hobby changing carrier from data engineer to front end / full stack dev because I like it more than data engineering
-        and we live in an age where if you dont do what you like you will under performe
-[2016] - [Now]
+        and we live in an age where if you dont do what you like you will under performe.
+        warn users that information provided may not always be correct...
+        `,
+    },
 
+    {
+      role: "assistant",
+      content: `
+    from [2016] until [Now] Luis always worked as hobby in its true passion projects which he displays in his site
 
-See my website for all projects done: https://luiscristovao.github.io/Projects/
+    See my website for all projects done: https://luiscristovao.github.io/Projects/
 
 Here are some relevant projects:
 
@@ -75,9 +82,13 @@ Particles Animation with math:https://luiscristovao.github.io/CSS-Animation-Engi
 This Chat with AI using webLLM lib
 
 Technologies used: Html and javascript, python, flask, node js express 
-
-Data Engineer at various banks
-[11/03/2019] - [04/10/2023]
+  `,
+    },
+    {
+      role: "assistant",
+      content: `
+      Data Engineer at various banks
+from [11/03/2019] to [04/10/2023]
 
 
 Worked in 2 banks for almost 5 years as a data engineer 
@@ -86,7 +97,7 @@ Technologies used: Python ,Pyspark, SQL, Bash, Azure cloud environment
 
 Education
  Master Degree in Electrical and Computer Engineering
-[2010] - [2017]
+from [2010] to [2017]
 
 
 [University] - NOVA, faculty of science and technology 
@@ -103,9 +114,9 @@ for leasure:
 
 other interests:
         catholic religion
-
       `,
-  };
+    },
+  ];
 
   const scrollToBottom = () => {
     if (chatBoxRef.current) {
@@ -123,17 +134,24 @@ other interests:
   };
 
   const sendMessage = async () => {
-    if (!input.trim() || isGenerating || status!=="Ready!") return;
+    if (!input.trim() || isGenerating || status !== "Ready!") return;
     // conversation_history.current=[...conversation_history.current,messages[messages.length-1]]
-    const reduceMessages = [...messages.slice(-3)];
-    const newMessages = [...reduceMessages, { role: "user", content: input }];
+
+    const newMessages = [...messages, { role: "user", content: input }];
     setMessages([...newMessages, { role: "assistant", content: "typing..." }]);
     setInput("");
     setIsGenerating(true);
 
     try {
       let curMessage = "";
-      const ai_context:any = [initialKnowledge, ...newMessages];
+      const reduceMessages = messages
+        .slice(-2) // Get the last 2 messages
+        .filter((msg) => msg.content.split(/\s+/).filter(Boolean).length < 30);//filter messages with less than 30 words
+      const ai_context: any = [
+        ...initialKnowledge,
+        ...reduceMessages,
+        ...[{ role: "user", content: input }],
+      ];
       const completion = await engine.chat.completions.create({
         stream: true,
         messages: ai_context,
@@ -171,7 +189,14 @@ other interests:
   };
 
   return (
-    <div style={{ maxWidth: 600,display:"flex",alignItems:"center",flexDirection:"column" }}>
+    <div
+      style={{
+        maxWidth: 600,
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
       <h2>🧠 WebLLM Chat</h2>
 
       <label>
@@ -192,15 +217,14 @@ other interests:
         </button>
       </label>
 
-      <div className="loading" style={{ fontSize: "0.9rem", marginBottom: "1rem", color: "#999" }}>
+      <div
+        className="loading"
+        style={{ fontSize: "0.9rem", marginBottom: "1rem", color: "#999" }}
+      >
         {status}
       </div>
 
-      <div
-        id="chat-box"
-        ref={chatBoxRef}
-        
-      >
+      <div id="chat-box" ref={chatBoxRef}>
         {messages.map((msg, i) => (
           <div
             key={i}
@@ -208,9 +232,8 @@ other interests:
               textAlign: msg.role === "user" ? "right" : "left",
               margin: "0.5rem 0",
               whiteSpace: "pre-line",
-              wordBreak: "break-word",       // ✅ Prevents overflow on long words/URLs
-              overflowWrap: "break-word",    // ✅ Helps break long unbroken strings
-              
+              wordBreak: "break-word", // ✅ Prevents overflow on long words/URLs
+              overflowWrap: "break-word", // ✅ Helps break long unbroken strings
             }}
           >
             <strong>{msg.role === "user" ? "You" : "AI"}:</strong> {msg.content}
@@ -219,7 +242,6 @@ other interests:
       </div>
 
       <textarea
-        
         placeholder="Type your question..."
         value={input}
         onChange={(e: any) => {
@@ -228,8 +250,8 @@ other interests:
         onKeyDown={(e: any) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault(); // prevent newline
-            if(status===""){
-              handleModelInit()
+            if (status === "") {
+              handleModelInit();
             }
             sendMessage();
           }
@@ -237,13 +259,12 @@ other interests:
       ></textarea>
 
       <button
-        onClick={()=>{
-
-          if(status===""){
-            handleModelInit()
+        onClick={() => {
+          if (status === "") {
+            handleModelInit();
           }
 
-          sendMessage()
+          sendMessage();
         }}
         disabled={isGenerating || status !== "Ready!"}
       >
