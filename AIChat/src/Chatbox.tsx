@@ -120,7 +120,7 @@ other interests:
   };
 
   const sendMessage = async () => {
-    if (!input.trim() || isGenerating) return;
+    if (!input.trim() || isGenerating || status!=="Ready!") return;
     // conversation_history.current=[...conversation_history.current,messages[messages.length-1]]
     const reduceMessages = [...messages.slice(-3)];
     const newMessages = [...reduceMessages, { role: "user", content: input }];
@@ -189,7 +189,7 @@ other interests:
         </button>
       </label>
 
-      <div style={{ fontSize: "0.9rem", marginBottom: "1rem", color: "#555" }}>
+      <div style={{ fontSize: "0.9rem", marginBottom: "1rem", color: "#999" }}>
         {status}
       </div>
 
@@ -231,13 +231,23 @@ other interests:
         onKeyDown={(e: any) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault(); // prevent newline
+            if(status===""){
+              handleModelInit()
+            }
             sendMessage();
           }
         }}
       ></textarea>
 
       <button
-        onClick={sendMessage}
+        onClick={()=>{
+
+          if(status===""){
+            handleModelInit()
+          }
+
+          sendMessage()
+        }}
         disabled={isGenerating || status !== "Ready!"}
         style={{ marginTop: "0.5rem", width: "100%" }}
       >
