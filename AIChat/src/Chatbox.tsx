@@ -35,6 +35,7 @@ const ChatBox: React.FC = () => {
 See my website for all projects done: https://luiscristovao.github.io/Projects/
 
 Here are some relevant projects:
+
 Local Password Manager in React 19  ts: https://luiscristovao.github.io/Projects/index.html?Password-Manager-v3 
 Interface to manage and store site’s users, password and sensitive information 
 Data encrypted with AES-GCM
@@ -70,6 +71,8 @@ Chat Rooms: https://luiscristovao.github.io/Projects/index.html?Chat-Rooms-App
 Purpose Calendar manager: https://luiscristovao.github.io/Projects/index.html?Purpose-Calendar-Manager
 
 Particles Animation with math:https://luiscristovao.github.io/CSS-Animation-Engine/crazy_animations/game.html
+
+This Chat with AI using webLLM lib
 
 Technologies used: Html and javascript, python, flask, node js express 
 
