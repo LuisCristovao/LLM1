@@ -79,9 +79,9 @@ Purpose Calendar manager: https://luiscristovao.github.io/Projects/index.html?Pu
 
 Particles Animation with math:https://luiscristovao.github.io/CSS-Animation-Engine/crazy_animations/game.html
 
-This Chat with AI using webLLM lib
+Luis also created this Chat that deliveres anwsers to people about him. So Luis (Tiago) created this application chat
 
-Technologies used: Html and javascript, python, flask, node js express 
+Technologies used:  React,typescript, Html, javascript, python, flask, node js express 
   `,
     },
     {
